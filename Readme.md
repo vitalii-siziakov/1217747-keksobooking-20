@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Виталий Сизяков](https://up.htmlacademy.ru/javascript/20/user/1217747).
-* Наставник: [Никита Сигов] (https://htmlacademy.ru/profile/crazer).
+* Наставник: [Никита Сигов](https://htmlacademy.ru/profile/crazer).
 
 ---
 
