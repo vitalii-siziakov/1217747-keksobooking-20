@@ -1,12 +1,5 @@
 'use strict';
 
-// Находим блок с картой и записываем в переменную
-var map = document.querySelector('.map');
-// Переключаем карту из неактивного состояния в активное (убираем класс map--faded)
-map.classList.remove('map--faded');
-// Находим блок с метками и записываем в переменную
-var mapPins = map.querySelector('.map__pins');
-
 // Константы
 var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
 var TITLES = ['Заголовок_1', 'Заголовок_2', 'Заголовок_3', 'Заголовок_4', 'Заголовок_5', 'Заголовок_6', 'Заголовок_7', 'Заголовок_8'];
@@ -20,6 +13,13 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var DESCRIPTIONS = ['Описание_1', 'Описание_2', 'Описание_3', 'Описание_4', 'Описание_5', 'Описание_6', 'Описание_7', 'Описание_8'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
+// Переменные
+// Находим блок с картой и записываем в переменную
+var map = document.querySelector('.map');
+// Находим блок с метками и записываем в переменную
+var mapPins = map.querySelector('.map__pins');
+
+// Функции
 // Функция: возвращает число в интервале (включительно)
 var getRandomInRange = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -28,9 +28,9 @@ var getRandomInRange = function (min, max) {
 // Функция: возвращает массив строк длиной не более переданного с уникальными значениями
 var getRandomArr = function (arr) {
   var newArr = [];
-  var newArrLenght = getRandomInRange(1, arr.length);
+  var newArrLength = getRandomInRange(1, arr.length);
 
-  for (var i = 0; i < newArrLenght; i++) {
+  for (var i = 0; i < newArrLength; i++) {
     var newArrItem = arr[getRandomInRange(0, arr.length - 1)];
     if (newArr.includes(newArrItem)) {
       i--;
@@ -105,6 +105,9 @@ var renderPinBlocks = function (cardsArr) {
   mapPins.appendChild(fragment);
 };
 
+// Инструкции
+// Переключаем карту из неактивного состояния в активное (убираем класс map--faded)
+map.classList.remove('map--faded');
 // Создаем карточки объектов
 var cards = createCards(8);
 // Рендерим метки на основании карточек
