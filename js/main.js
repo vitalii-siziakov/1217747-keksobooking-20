@@ -15,10 +15,31 @@ var DESCRIPTIONS = ['Описание_1', 'Описание_2', 'Описани�
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 // Переменные
-// Находим блок с картой и записываем в переменную
+var mapPinMain = document.querySelector('.map__pin--main');
+var mapPinMainInactiveX = parseInt(mapPinMain.style.left, 10);
+var mapPinMainInactiveY = parseInt(mapPinMain.style.top, 10);
+// смещение по X: ширина блока map__pin--main/2 (деление нужно, чтобы попадать центром указателя в точку), округление до целого по ТЗ
+var mainPinMoveX = Math.round(65 / 2);
+// смещение по Y: высота блока img + высота метки - отступ изображения и метки от map__pin--main, округление до целого по ТЗ
+var mainPinMoveY = Math.round(62 + 22 - 2);
+
+var mapPinMainActiveX = mapPinMainInactiveX + mainPinMoveX;
+var mapPinMainActiveY = mapPinMainInactiveY + mainPinMoveY;
+
 var map = document.querySelector('.map');
-// Находим блок с метками и записываем в переменную
 var mapPins = map.querySelector('.map__pins');
+
+var adForm = document.querySelector('.ad-form');
+var adFormFieldsets = adForm.querySelectorAll('fieldset');
+
+var addressInput = adForm.querySelector('#address');
+
+var mapFilters = document.querySelector('.map__filters');
+var mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
+var mapFiltersSelectors = mapFilters.querySelectorAll('select');
+
+var roomNumberSelect = document.querySelector('#room_number');
+var capacitySelect = document.querySelector('#capacity');
 
 // Функции
 // Функция: возвращает число в интервале (включительно)
@@ -137,7 +158,7 @@ var createPhotoBlock = function (photosBlock, photoBlock, cardPhotosArr) {
   }
 };
 
-// Функция: создает описание для карточки объекта
+// Функция: создает описание для карточки объекта - закомен
 var createCardBlock = function (card) {
 
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -166,22 +187,87 @@ var createCardBlock = function (card) {
   return cardElement;
 };
 
-// Функция: рендерит блок описания объекта на странице
-var renderCardBlock = function (cardsArrItem) {
+// Функция: получение значения select
+var getSelectValue = function (select) {
+  var currentSelect = select;
+  var value = currentSelect.value;
+  return value;
+};
 
-  var cardBlock = createCardBlock(cardsArrItem);
-  var fragment = document.createDocumentFragment().appendChild(cardBlock);
+// Функция: добавление элементам DOM атрибута disable
+var addDisableAttribute = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    var element = array[i];
+    element.setAttribute('disabled', 'true');
+  }
+};
 
-  var mapFilters = map.querySelector('.map__filters-container');
-  mapFilters.before(fragment);
+// Функция: удаление у элементов DOM атрибута disable
+var removeDisableAttribute = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    var element = array[i];
+    element.removeAttribute('disabled');
+  }
+};
+
+// Функция: перевод странциы в активное состояние
+var activatePage = function () {
+  removeDisableAttribute(adFormFieldsets);
+  removeDisableAttribute(mapFiltersFieldsets);
+  removeDisableAttribute(mapFiltersSelectors);
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  addressInput.setAttribute('placeholder', mapPinMainActiveX + ' ' + mapPinMainActiveY);
+  renderPinBlocks(createCards(8));
+};
+
+// Функция: проверка соответстивия количества мест количеству гостей (и наобородт)
+var checkRoomCapacityCustom = function () {
+  var room = getSelectValue(roomNumberSelect);
+  var capacity = getSelectValue(capacitySelect);
+
+  if (room === '100' && capacity === '0') {
+    capacitySelect.setCustomValidity('');
+    roomNumberSelect.setCustomValidity('');
+  } else if (room !== capacity) {
+    capacitySelect.setCustomValidity('Количество гостей не соответствует количеству мест');
+    roomNumberSelect.setCustomValidity('Количество мест не соответствует количеству гостей');
+  } else {
+    capacitySelect.setCustomValidity('');
+    roomNumberSelect.setCustomValidity('');
+  }
+};
+
+// Функция: нажатие ЛКМ на главный pin
+var mousedownMapPinMain = function (evt) {
+  if (evt.button === 0) {
+    activatePage();
+    mapPinMain.removeEventListener('keydown', keydownMapPinMain, {once: true});
+  }
+};
+
+// Функция: нажатие Enter при наведении на главный pin
+var keydownMapPinMain = function (evt) {
+  if (evt.key === 'Enter') {
+    activatePage();
+    mapPinMain.removeEventListener('mousedown', mousedownMapPinMain, {once: true});
+  }
 };
 
 // Инструкции
-// Переключаем карту из неактивного состояния в активное (убираем класс map--faded)
-map.classList.remove('map--faded');
-// Создаем карточки объектов
-var cards = createCards(8);
-// Рендерим метки на основании карточек объектов
-renderPinBlocks(cards);
-// Рендерим описание объекта на основании первой карточки объекта
-renderCardBlock(cards[0]);
+// Добавляем адрес
+addressInput.setAttribute('placeholder', mapPinMainInactiveX + ' ' + mapPinMainInactiveY);
+
+// Делаем неактивными поля ввода форм
+addDisableAttribute(adFormFieldsets);
+addDisableAttribute(mapFiltersFieldsets);
+addDisableAttribute(mapFiltersSelectors);
+
+// Обработчики
+// Клик ЛКП и нажатие Enter при наведении на главный pin
+mapPinMain.addEventListener('mousedown', mousedownMapPinMain, {once: true});
+mapPinMain.addEventListener('keydown', keydownMapPinMain, {once: true});
+
+// Проверка значений select комнат и гостей при изменении их значений
+roomNumberSelect.addEventListener('change', checkRoomCapacityCustom);
+capacitySelect.addEventListener('change', checkRoomCapacityCustom);
