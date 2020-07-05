@@ -202,6 +202,7 @@ var addDisableAttribute = function (array) {
   }
 };
 
+
 // Функция: удаление у элементов DOM атрибута disable
 var removeDisableAttribute = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -225,17 +226,22 @@ var activatePage = function () {
 var checkRoomCapacityCustom = function () {
   var room = getSelectValue(roomNumberSelect);
   var capacity = getSelectValue(capacitySelect);
+  var formSubmit = document.querySelector('.ad-form__submit');
 
   if (room === '100' && capacity === '0') {
     capacitySelect.setCustomValidity('');
     roomNumberSelect.setCustomValidity('');
+    formSubmit.disabled = false;
   } else if (room !== capacity) {
     capacitySelect.setCustomValidity('Количество гостей не соответствует количеству мест');
     roomNumberSelect.setCustomValidity('Количество мест не соответствует количеству гостей');
+    formSubmit.disabled = true;
   } else {
     capacitySelect.setCustomValidity('');
     roomNumberSelect.setCustomValidity('');
+    formSubmit.disabled = false;
   }
+
 };
 
 // Функция: нажатие ЛКМ на главный pin
