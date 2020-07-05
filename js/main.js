@@ -256,7 +256,7 @@ var keydownMapPinMain = function (evt) {
 
 // Инструкции
 // Добавляем адрес
-addressInput.setAttribute('placeholder', mapPinMainInactiveX + ' ' + mapPinMainInactiveY);
+addressInput.setAttribute('value', mapPinMainInactiveX + ' ' + mapPinMainInactiveY);
 
 // Делаем неактивными поля ввода форм
 addDisableAttribute(adFormFieldsets);
