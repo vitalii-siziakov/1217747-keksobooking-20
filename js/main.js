@@ -158,7 +158,7 @@ var createPhotoBlock = function (photosBlock, photoBlock, cardPhotosArr) {
   }
 };
 
-// Функция: создает описание для карточки объекта - закомен
+// Функция: создает описание для карточки объекта
 var createCardBlock = function (card) {
 
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -222,7 +222,7 @@ var activatePage = function () {
   renderPinBlocks(createCards(8));
 };
 
-// Функция: проверка соответстивия количества мест количеству гостей (и наобородт)
+// Функция: проверка соответстивия количества мест количеству гостей (и наоборот)
 var checkRoomCapacityCustom = function () {
   var room = getSelectValue(roomNumberSelect);
   var capacity = getSelectValue(capacitySelect);
