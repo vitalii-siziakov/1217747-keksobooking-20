@@ -212,7 +212,6 @@ var addDisableAttribute = function (array) {
   }
 };
 
-
 // Функция: удаление у элементов DOM атрибута disable
 var removeDisableAttribute = function (array) {
   for (var i = 0; i < array.length; i++) {
@@ -222,7 +221,6 @@ var removeDisableAttribute = function (array) {
 };
 
 // Функция: перевод странциы в активное состояние
-var cards = createCards(8);
 var activatePage = function () {
   removeDisableAttribute(adFormFieldsets);
   removeDisableAttribute(mapFiltersFieldsets);
@@ -230,6 +228,8 @@ var activatePage = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   addressInput.setAttribute('placeholder', mapPinMainActiveX + ' ' + mapPinMainActiveY);
+
+  var cards = createCards(8);
   renderPinBlocks(cards);
   renderCardBlock(cards[0]);
 };
