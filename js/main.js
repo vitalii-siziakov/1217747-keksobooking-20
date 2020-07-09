@@ -94,11 +94,11 @@ var createCard = function (arrIndex) {
 
 // Функция: создает карточки объектов
 var createCards = function (cardsCount) {
-  var cards = [];
+  var cardsArr = [];
   for (var i = 0; i < cardsCount; i++) {
-    cards.push(createCard(i));
+    cardsArr.push(createCard(i));
   }
-  return cards;
+  return cardsArr;
 };
 
 // Функция: создает метку для карты
@@ -187,6 +187,16 @@ var createCardBlock = function (card) {
   return cardElement;
 };
 
+// Функция: рендерит блок описания объекта на странице
+var renderCardBlock = function (cardsArrItem) {
+
+  var cardBlock = createCardBlock(cardsArrItem);
+  var fragment = document.createDocumentFragment().appendChild(cardBlock);
+
+  var mapFiltersContainer = map.querySelector('.map__filters-container');
+  mapFiltersContainer.before(fragment);
+};
+
 // Функция: получение значения select
 var getSelectValue = function (select) {
   var currentSelect = select;
@@ -212,6 +222,7 @@ var removeDisableAttribute = function (array) {
 };
 
 // Функция: перевод странциы в активное состояние
+var cards = createCards(8);
 var activatePage = function () {
   removeDisableAttribute(adFormFieldsets);
   removeDisableAttribute(mapFiltersFieldsets);
@@ -219,7 +230,8 @@ var activatePage = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   addressInput.setAttribute('placeholder', mapPinMainActiveX + ' ' + mapPinMainActiveY);
-  renderPinBlocks(createCards(8));
+  renderPinBlocks(cards);
+  renderCardBlock(cards[0]);
 };
 
 // Функция: проверка соответстивия количества мест количеству гостей (и наоборот)
