@@ -16,25 +16,59 @@
   var addDisableAttribute = window.data.addDisableAttribute;
   var roomNumberSelect = window.data.roomNumberSelect;
   var capacitySelect = window.data.capacitySelect;
+  var cards = [];
+  var cardsFiltred = [];
+  var housingType = document.querySelector('#housing-type');
 
   var renderPinBlocks = window.pin.renderPinBlocks;
 
-  var createCards = window.card.createCards;
+  // var createCards = window.card.createCards;
   var renderCardBlock = window.card.renderCardBlock;
 
   var checkRoomCapacityCustom = window.form.checkRoomCapacityCustom;
 
-  // Функция: сообщение об ошибке
-  var onError = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
+  var getCardsArrFilterMaxCount = function (arr, count) {
+    var arrFilterMaxCount = arr.filter(function (item, index) {
+      return index < count;
+    });
+    return arrFilterMaxCount;
+  };
 
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
+  var getCardsArrFilterHousingType = function (arr, type) {
+    var arrFilterHousingType = arr.filter(function (item) {
+      return item.offer.type === type;
+    });
+    return arrFilterHousingType;
+  };
+
+  var filtratingByHousingType = function () {
+    var type = window.data.getSelectValue(housingType);
+    var mapPins = map.querySelector('.map__pins');
+    var mapCard = document.querySelector('.popup');
+
+    mapPins.innerHTML = '';
+    mapCard.setAttribute('hidden', true);
+
+    if (type === 'any') {
+      cardsFiltred = getCardsArrFilterMaxCount(cards, 5);
+    } else if (type === 'palace') {
+      cardsFiltred = getCardsArrFilterHousingType(cards, 'palace');
+    } else if (type === 'flat') {
+      cardsFiltred = getCardsArrFilterHousingType(cards, 'flat');
+    } else if (type === 'house') {
+      cardsFiltred = getCardsArrFilterHousingType(cards, 'house');
+    } else if (type === 'bungalo') {
+      cardsFiltred = getCardsArrFilterHousingType(cards, 'bungalo');
+    }
+
+    renderPinBlocks(getCardsArrFilterMaxCount(cardsFiltred, 5));
+  };
+
+  var onLoad = function (cardsArr) {
+    cards = cardsArr;
+    cardsFiltred = getCardsArrFilterMaxCount(cards, 5);
+    renderPinBlocks(cardsFiltred);
+    renderCardBlock(cardsFiltred[0]);
   };
 
   // Функция: перевод странциы в активное состояние
@@ -46,9 +80,9 @@
     adForm.classList.remove('ad-form--disabled');
     addressInput.setAttribute('placeholder', mapPinMainActiveX + ' ' + mapPinMainActiveY);
 
-    var cards = createCards(8);
-    window.connect.load(renderPinBlocks, onError);
-    renderCardBlock(cards[0]);
+    // var cards = createCards(8);
+    window.connect.load(onLoad, window.connect.onError);
+    // renderCardBlock(cards[0]);
   };
 
   // Функция: нажатие ЛКМ на главный pin
@@ -84,4 +118,6 @@
   // Проверка значений select комнат и гостей при изменении их значений
   roomNumberSelect.addEventListener('change', checkRoomCapacityCustom);
   capacitySelect.addEventListener('change', checkRoomCapacityCustom);
+
+  housingType.addEventListener('change', filtratingByHousingType);
 })();
