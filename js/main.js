@@ -126,4 +126,67 @@
   var mapFilters = document.querySelector('.map__filters');
   mapFilters.addEventListener('change', changeFilterOptions);
 
+  var form = document.querySelector('.ad-form');
+
+  var onSuccess = function () {
+    window.connect.showSuccessMessage();
+
+    window.data.addDisableAttribute(window.data.adFormFieldsets);
+    window.data.addDisableAttribute(window.data.mapFiltersFieldsets);
+    window.data.addDisableAttribute(window.data.mapFiltersSelectors);
+    document.querySelector('.map').classList.add('map--faded');
+    document.querySelector('.ad-form').reset();
+    document.querySelector('.ad-form').classList.add('ad-form--disabled');
+
+    document.querySelector('.popup').remove();
+    removeMapPinsWithoutMain();
+    var mapPinMainCopy = mapPinMain.cloneNode(true);
+    var mapPins = document.querySelector('.map__pins');
+    mapPins.appendChild(mapPinMainCopy);
+    mapPinMain.remove();
+    mapPinMain.setAttribute('style', 'left: 570px; top: 375px');
+
+    var resetPage = function () {
+      var mapPinMainNewCopy = document.querySelector('.map__pin--main');
+      mapPinMainNewCopy.setAttribute('style', 'left: 570px; top: 375px');
+      document.querySelector('main').querySelector('.success').remove();
+      mapPinMainNewCopy.addEventListener('mousedown', mousedownMapPinMain, {once: true});
+      mapPinMainNewCopy.addEventListener('keydown', keydownMapPinMain, {once: true});
+    };
+
+    var resetPageEscape = function (evt) {
+      if (evt.key === 'Escape') {
+        resetPage();
+      }
+    };
+
+    window.addEventListener('click', resetPage, {once: true});
+    window.addEventListener('keydown', resetPageEscape, {once: true});
+  };
+
+  var onError = function () {
+    window.connect.showErrorMessage();
+    var errorButton = document.querySelector('main').querySelector('.error').querySelector('.error__button');
+
+    var showPage = function () {
+      document.querySelector('main').querySelector('.error').remove();
+    };
+
+    var showPageEscape = function (evt) {
+      if (evt.key === 'Escape') {
+        showPage();
+      }
+    };
+
+    errorButton.addEventListener('click', showPage, {once: true});
+    window.addEventListener('click', showPage, {once: true});
+    window.addEventListener('keydown', showPageEscape, {once: true});
+  };
+
+  var submitHandler = function (evt) {
+    window.connect.save(new FormData(form), onSuccess, onError);
+    evt.preventDefault();
+  };
+
+  form.addEventListener('submit', submitHandler);
 })();
