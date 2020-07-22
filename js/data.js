@@ -2,18 +2,9 @@
 
 (function () {
   // Константы
-  var AVATARS = ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'];
-  var TITLES = ['Заголовок_1', 'Заголовок_2', 'Заголовок_3', 'Заголовок_4', 'Заголовок_5', 'Заголовок_6', 'Заголовок_7', 'Заголовок_8'];
-  var PRICES = [5000, 7000, 16000, 43000, 19000, 25000, 17000, 15000];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var TYPESRUS = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
-  var ROOMS = [1, 2, 3];
-  var GUESTS = [1, 2, 3];
-  var CHECKINS = ['12:00', '13:00', '14:00'];
-  var CHECKOUTS = ['12:00', '13:00', '14:00'];
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var DESCRIPTIONS = ['Описание_1', 'Описание_2', 'Описание_3', 'Описание_4', 'Описание_5', 'Описание_6', 'Описание_7', 'Описание_8'];
-  var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
   // Переменные
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -38,9 +29,6 @@
   var mapFilters = document.querySelector('.map__filters');
   var mapFiltersFieldsets = mapFilters.querySelectorAll('fieldset');
   var mapFiltersSelectors = mapFilters.querySelectorAll('select');
-
-  var roomNumberSelect = document.querySelector('#room_number');
-  var capacitySelect = document.querySelector('#capacity');
 
   // Функции
   // Функция: возвращает число в интервале (включительно)
@@ -97,18 +85,9 @@
   };
 
   window.data = {
-    AVATARS: AVATARS,
-    TITLES: TITLES,
-    PRICES: PRICES,
     TYPES: TYPES,
     TYPESRUS: TYPESRUS,
-    ROOMS: ROOMS,
-    GUESTS: GUESTS,
-    CHECKINS: CHECKINS,
-    CHECKOUTS: CHECKOUTS,
     FEATURES: FEATURES,
-    DESCRIPTIONS: DESCRIPTIONS,
-    PHOTOS: PHOTOS,
     mapPinMain: mapPinMain,
     mapPinMainInactiveX: mapPinMainInactiveX,
     mapPinMainInactiveY: mapPinMainInactiveY,
@@ -124,8 +103,6 @@
     mapFilters: mapFilters,
     mapFiltersFieldsets: mapFiltersFieldsets,
     mapFiltersSelectors: mapFiltersSelectors,
-    roomNumberSelect: roomNumberSelect,
-    capacitySelect: capacitySelect,
     getRandomInRange: getRandomInRange,
     getRandomArr: getRandomArr,
     chooseSingularPlural: chooseSingularPlural,

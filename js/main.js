@@ -7,68 +7,84 @@
   var mapFiltersSelectors = window.data.mapFiltersSelectors;
   var map = window.data.map;
   var adForm = window.data.adForm;
-  var addressInput = window.data.addressInput;
   var mapPinMain = window.data.mapPinMain;
-  var mapPinMainActiveX = window.data.mapPinMainActiveX;
-  var mapPinMainActiveY = window.data.mapPinMainActiveY;
-  var mapPinMainInactiveX = window.data.mapPinMainInactiveX;
-  var mapPinMainInactiveY = window.data.mapPinMainInactiveY;
   var addDisableAttribute = window.data.addDisableAttribute;
-  var roomNumberSelect = window.data.roomNumberSelect;
-  var capacitySelect = window.data.capacitySelect;
   var cards = [];
   var cardsFiltred = [];
-  var housingType = document.querySelector('#housing-type');
+  var maxViewPinCount = 5;
 
   var renderPinBlocks = window.pin.renderPinBlocks;
-
-  // var createCards = window.card.createCards;
   var renderCardBlock = window.card.renderCardBlock;
 
-  var checkRoomCapacityCustom = window.form.checkRoomCapacityCustom;
-
-  var getCardsArrFilterMaxCount = function (arr, count) {
-    var arrFilterMaxCount = arr.filter(function (item, index) {
-      return index < count;
-    });
-    return arrFilterMaxCount;
+  var hidePopup = function () {
+    document.querySelector('.popup').setAttribute('hidden', true);
+    window.removeEventListener('keydown', hidePopupEscape, {once: true});
   };
 
-  var getCardsArrFilterHousingType = function (arr, type) {
-    var arrFilterHousingType = arr.filter(function (item) {
-      return item.offer.type === type;
-    });
-    return arrFilterHousingType;
-  };
-
-  var filtratingByHousingType = function () {
-    var type = window.data.getSelectValue(housingType);
-    var mapPins = map.querySelector('.map__pins');
-    var mapCard = document.querySelector('.popup');
-
-    mapPins.innerHTML = '';
-    mapCard.setAttribute('hidden', true);
-
-    if (type === 'any') {
-      cardsFiltred = getCardsArrFilterMaxCount(cards, 5);
-    } else if (type === 'palace') {
-      cardsFiltred = getCardsArrFilterHousingType(cards, 'palace');
-    } else if (type === 'flat') {
-      cardsFiltred = getCardsArrFilterHousingType(cards, 'flat');
-    } else if (type === 'house') {
-      cardsFiltred = getCardsArrFilterHousingType(cards, 'house');
-    } else if (type === 'bungalo') {
-      cardsFiltred = getCardsArrFilterHousingType(cards, 'bungalo');
+  var hidePopupEscape = function (evt) {
+    if (evt.key === 'Escape') {
+      hidePopup();
+      document.querySelector('.popup__close').removeEventListener('click', hidePopup, {once: true});
     }
-
-    renderPinBlocks(getCardsArrFilterMaxCount(cardsFiltred, 5));
   };
+
+  var removeMapPinsWithoutMain = function () {
+    var mapPins = document.querySelectorAll('.map__pin');
+    mapPins.forEach(function (element) {
+      if (!element.classList.contains('map__pin--main')) {
+        element.remove();
+      }
+    });
+  };
+
+  var addMapPinAndListeners = function () {
+    var mapPins = document.querySelectorAll('.map__pin');
+
+    mapPins.forEach(function (mapPin, index) {
+      if (index !== 0) {
+        var mapPinActions = function () {
+          document.querySelector('.popup').remove();
+          renderCardBlock(cardsFiltred[index - 1]);
+
+          document.querySelector('.popup__close').addEventListener('click', hidePopup);
+          window.addEventListener('keydown', hidePopupEscape);
+        };
+        mapPin.addEventListener('click', mapPinActions);
+      }
+    });
+  };
+
+  var applyFilterOptions = function (arr) {
+    var typeArr = window.mapFilters.filterType(arr, 'type');
+    var priceArr = window.mapFilters.filterPrice(typeArr, 'price');
+    var roomsArr = window.mapFilters.filterRooms(priceArr, 'rooms');
+    var guestsArr = window.mapFilters.filterGuests(roomsArr, 'guests');
+    var wifiArr = window.mapFilters.filterFeatures(guestsArr, 'wifi');
+    return wifiArr;
+  };
+
+  var changeFilterOptions = window.debounce(function () {
+    removeMapPinsWithoutMain();
+    hidePopup();
+
+    cardsFiltred = applyFilterOptions(cards);
+    var cardsFiltredSlice = cardsFiltred.slice(0, maxViewPinCount);
+    renderPinBlocks(cardsFiltredSlice);
+    addMapPinAndListeners();
+    window.pin.showMapPinMainAddres();
+  });
+
 
   var onLoad = function (cardsArr) {
     cards = cardsArr;
-    cardsFiltred = getCardsArrFilterMaxCount(cards, 5);
+    cardsFiltred = cards.slice(0, maxViewPinCount);
     renderPinBlocks(cardsFiltred);
     renderCardBlock(cardsFiltred[0]);
+    addMapPinAndListeners();
+    document.querySelector('.popup__close').addEventListener('click', hidePopup);
+    window.addEventListener('keydown', hidePopupEscape);
+    window.pin.moveMapPinMain();
+    window.pin.showMapPinMainAddres();
   };
 
   // Функция: перевод странциы в активное состояние
@@ -78,11 +94,7 @@
     removeDisableAttribute(mapFiltersSelectors);
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    addressInput.setAttribute('placeholder', mapPinMainActiveX + ' ' + mapPinMainActiveY);
-
-    // var cards = createCards(8);
     window.connect.load(onLoad, window.connect.onError);
-    // renderCardBlock(cards[0]);
   };
 
   // Функция: нажатие ЛКМ на главный pin
@@ -101,23 +113,17 @@
     }
   };
 
-  // Инструкции
   // Добавляем адрес
-  addressInput.setAttribute('value', mapPinMainInactiveX + ' ' + mapPinMainInactiveY);
-
   // Делаем неактивными поля ввода форм
   addDisableAttribute(adFormFieldsets);
   addDisableAttribute(mapFiltersFieldsets);
   addDisableAttribute(mapFiltersSelectors);
 
-  // Обработчики
   // Клик ЛКП и нажатие Enter при наведении на главный pin
   mapPinMain.addEventListener('mousedown', mousedownMapPinMain, {once: true});
   mapPinMain.addEventListener('keydown', keydownMapPinMain, {once: true});
 
-  // Проверка значений select комнат и гостей при изменении их значений
-  roomNumberSelect.addEventListener('change', checkRoomCapacityCustom);
-  capacitySelect.addEventListener('change', checkRoomCapacityCustom);
+  var mapFilters = document.querySelector('.map__filters');
+  mapFilters.addEventListener('change', changeFilterOptions);
 
-  housingType.addEventListener('change', filtratingByHousingType);
 })();

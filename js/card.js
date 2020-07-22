@@ -1,62 +1,12 @@
 'use strict';
 
 (function () {
-  var AVATARS = window.data.AVATARS;
-  var TITLES = window.data.TITLES;
-  var PRICES = window.data.PRICES;
-  var TYPES = window.data.TYPES;
   var TYPESRUS = window.data.TYPESRUS;
-  var ROOMS = window.data.ROOMS;
-  var GUESTS = window.data.GUESTS;
-  var CHECKINS = window.data.CHECKINS;
-  var CHECKOUTS = window.data.CHECKOUTS;
   var FEATURES = window.data.FEATURES;
-  var DESCRIPTIONS = window.data.DESCRIPTIONS;
-  var PHOTOS = window.data.PHOTOS;
 
   var map = window.data.map;
   // Функции
-  var getRandomArr = window.data.getRandomArr;
-  var getRandomInRange = window.data.getRandomInRange;
   var chooseSingularPlural = window.data.chooseSingularPlural;
-
-  // Функция: создает карточку объекта
-  var createCard = function (arrIndex) {
-    var x = getRandomInRange(0, 1200); // случайное число, координата x метки на карте (значение ограничено размерами блока, в котором перетаскивается метка (1200))
-    var y = getRandomInRange(130, 630); // случайное число, координата y метки на карте от 130 до 630.
-    var card = {
-      author: {
-        avatar: AVATARS[arrIndex] // строка, адрес изображения
-      },
-      offer: {
-        title: TITLES[arrIndex], // строка, заголовок предложения
-        address: x + ', ' + y, // строка, адрес предложения
-        price: PRICES[arrIndex], // число, стоимость
-        type: TYPES[getRandomInRange(0, TYPES.length - 1)], // строка с одним из четырёх фиксированных значений: palace, flat, house, bungalo
-        rooms: ROOMS[getRandomInRange(0, ROOMS.length - 1)], // число, количество комнат
-        guests: GUESTS[getRandomInRange(0, GUESTS.length - 1)], // число, количество гостей
-        checkin: CHECKINS[getRandomInRange(0, CHECKINS.length - 1)], // строка: 12:00, 13:00, 14:00,
-        checkout: CHECKOUTS[getRandomInRange(0, CHECKOUTS.length - 1)], // строка: 12:00, 13:00, 14:00
-        features: getRandomArr(FEATURES), // массив строк случайной длины из ниже предложенных: "wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"
-        description: DESCRIPTIONS[arrIndex], // строка с описанием
-        photos: getRandomArr(PHOTOS), // массив строк случайной длины, содержащий адреса фотографий
-      },
-      location: {
-        x: x, // координата x метки на карте
-        y: y // координата y метки на карте
-      }
-    };
-    return card;
-  };
-
-  // Функция: создает карточки объектов
-  var createCards = function (cardsCount) {
-    var cardsArr = [];
-    for (var i = 0; i < cardsCount; i++) {
-      cardsArr.push(createCard(i));
-    }
-    return cardsArr;
-  };
 
   // Функция: удаляет несоответствующие объекту особенности из описания в карточке объекта
   var removeExtraFeatures = function (featuresBlock, allFeaturesArr, cardFeaturesArr) {
@@ -120,7 +70,6 @@
   };
 
   window.card = {
-    createCards: createCards,
     renderCardBlock: renderCardBlock
   };
 })();
