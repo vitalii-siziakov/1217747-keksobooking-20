@@ -102,6 +102,14 @@
     });
   };
 
+  var removePopup = function () {
+    if (document.querySelector('.popup')) {
+      document.querySelector('.popup').remove();
+      removeMapPinsActiveClass();
+      window.removeEventListener('keydown', hidePopupEscape, {once: true});
+    }
+  };
+
   var hidePopup = function () {
     if (document.querySelector('.popup')) {
       document.querySelector('.popup').setAttribute('hidden', true);
@@ -123,5 +131,6 @@
     removeMapPinsActiveClass: removeMapPinsActiveClass,
     hidePopup: hidePopup,
     hidePopupEscape: hidePopupEscape,
+    removePopup: removePopup
   };
 })();

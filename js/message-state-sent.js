@@ -6,6 +6,7 @@
   var deactivatePage = window.pageState.deactivatePage;
   var save = window.backend.save;
 
+  // success
   var showSuccessMessage = function () {
     var main = document.querySelector('main');
     var success = document.querySelector('#success').content;
@@ -14,26 +15,33 @@
   };
 
   var showPageIfSuccess = function () {
-    document.querySelector('main').querySelector('.success').remove();
+    window.removeEventListener('click', showPageIfSuccessClick);
     window.removeEventListener('keydown', showPageIfSuccessEscape, {once: true});
+    document.querySelector('main').querySelector('.success').remove();
   };
+
 
   var showPageIfSuccessEscape = function (evt) {
     if (evt.key === 'Escape') {
       showPageIfSuccess();
-      window.removeEventListener('click', showPageIfSuccess, {once: true});
+    }
+  };
+
+  var showPageIfSuccessClick = function (evt) {
+    if (evt.target.matches('.success__message') === false) {
+      showPageIfSuccess();
     }
   };
 
   var onSuccessDataSent = function () {
     showSuccessMessage();
     deactivatePage();
-    window.addEventListener('click', showPageIfSuccess, {once: true});
+
+    window.addEventListener('click', showPageIfSuccessClick);
     window.addEventListener('keydown', showPageIfSuccessEscape, {once: true});
   };
 
   // error
-
   var showErrorMessage = function () {
     var main = document.querySelector('main');
     var error = document.querySelector('#error').content;
@@ -42,21 +50,27 @@
   };
 
   var showPageIfError = function () {
-    document.querySelector('main').querySelector('.error').remove();
+    window.removeEventListener('click', showPageIfErrorClick);
     window.removeEventListener('keydown', showPageIfErrorEscape, {once: true});
+    document.querySelector('main').querySelector('.error').remove();
+  };
+
+  var showPageIfErrorClick = function (evt) {
+    if (evt.target.matches('.error__message') === false) {
+      showPageIfError();
+    }
   };
 
   var showPageIfErrorEscape = function (evt) {
     if (evt.key === 'Escape') {
       showPageIfError();
-      window.removeEventListener('click', showPageIfError, {once: true});
     }
   };
 
   var onErrorDataSent = function () {
     showErrorMessage();
 
-    window.addEventListener('click', showPageIfError, {once: true});
+    window.addEventListener('click', showPageIfErrorClick);
     window.addEventListener('keydown', showPageIfErrorEscape, {once: true});
   };
 

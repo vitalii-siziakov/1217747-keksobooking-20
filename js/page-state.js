@@ -10,6 +10,7 @@
   var removeMapPinsWithoutMapPinMain = window.mapPin.removeMapPinsWithoutMapPinMain;
   var addMapPinCardWithEventListeners = window.mapPin.addMapPinCardWithEventListeners;
   var hidePopup = window.mapCard.hidePopup;
+  var removePopup = window.mapCard.removePopup;
   var checkCardsArr = window.mapCard.checkCardsArr;
   var applyMapFilter = window.mapFilter.applyMapFilter;
   var renderPinBlocks = window.mapPin.renderPinBlocks;
@@ -89,6 +90,8 @@
     addDisableAttribute(mapFiltersFieldsets);
     addDisableAttribute(mapFiltersSelectors);
     removeFormFilterEventListeners();
+
+    removePopup();
 
     removeMapPinsWithoutMapPinMain();
     mapPinMain.setAttribute('style', 'left: 570px; top: 375px');

@@ -60,8 +60,8 @@
     if (room === '1') {
       capacitySelect[0].removeAttribute('disabled', 'true');
       capacitySelect[1].setAttribute('disabled', 'true');
-      capacitySelect.value[2].setAttribute('disabled', 'true');
-      capacitySelect.value[3].setAttribute('disabled', 'true');
+      capacitySelect[2].setAttribute('disabled', 'true');
+      capacitySelect[3].setAttribute('disabled', 'true');
     } else if (room === '2') {
       capacitySelect[0].removeAttribute('disabled', 'true');
       capacitySelect[1].removeAttribute('disabled', 'true');
@@ -79,32 +79,6 @@
       capacitySelect[3].removeAttribute('disabled', 'true');
     }
   };
-
-  // var checkCapacity = function () {
-  //   var capacity = getSelectValue(capacitySelect);
-
-  //   if (capacity === '1') {
-  //     roomNumberSelect[0].removeAttribute('disabled', 'true');
-  //     roomNumberSelect[1].setAttribute('disabled', 'true');
-  //     roomNumberSelect[2].setAttribute('disabled', 'true');
-  //     roomNumberSelect[3].setAttribute('disabled', 'true');
-  //   } else if (capacity === '2') {
-  //     roomNumberSelect[0].removeAttribute('disabled', 'true');
-  //     roomNumberSelect[1].removeAttribute('disabled', 'true');
-  //     roomNumberSelect[2].setAttribute('disabled', 'true');
-  //     roomNumberSelect[3].setAttribute('disabled', 'true');
-  //   } else if (capacity === '3') {
-  //     roomNumberSelect[0].removeAttribute('disabled', 'true');
-  //     roomNumberSelect[1].removeAttribute('disabled', 'true');
-  //     roomNumberSelect[2].removeAttribute('disabled', 'true');
-  //     roomNumberSelect[3].setAttribute('disabled', 'true');
-  //   } else {
-  //     roomNumberSelect[0].setAttribute('disabled', 'true');
-  //     roomNumberSelect[1].setAttribute('disabled', 'true');
-  //     roomNumberSelect[2].setAttribute('disabled', 'true');
-  //     roomNumberSelect[3].removeAttribute('disabled', 'false');
-  //   }
-  // };
 
   var addFormFilterEventListeners = function () {
     typeSelect.addEventListener('change', checkTypePrice);
