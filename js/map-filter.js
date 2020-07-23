@@ -1,6 +1,13 @@
 'use strict';
 
 (function () {
+
+  var getSelectValue = function (select) {
+    var currentSelect = select;
+    var value = currentSelect.value;
+    return value;
+  };
+
   var filter = function (arr, option, value) {
     var arrFiltered = arr.filter(function (item) {
       return item.offer[option] === value;
@@ -8,9 +15,16 @@
     return arrFiltered;
   };
 
-  var filterType = function (arr, option) {
+  var filterCheckbox = function (arr, option) {
+    var arrFiltered = arr.filter(function (item) {
+      return item.offer.features.includes(option) === true;
+    });
+    return arrFiltered;
+  };
+
+  var filterMapType = function (arr, option) {
     var housingType = document.querySelector('#housing-type');
-    var type = window.data.getSelectValue(housingType);
+    var type = getSelectValue(housingType);
     var cardsFiltredArr = [];
 
     if (type === 'palace') {
@@ -28,9 +42,9 @@
     return cardsFiltredArr;
   };
 
-  var filterPrice = function (arr) {
+  var filterMapPrice = function (arr) {
     var housingPrice = document.querySelector('#housing-price');
-    var price = window.data.getSelectValue(housingPrice);
+    var price = getSelectValue(housingPrice);
     var cardsFiltredArr = [];
 
     if (price === 'low') {
@@ -52,9 +66,9 @@
     return cardsFiltredArr;
   };
 
-  var filterRooms = function (arr, option) {
+  var filterMapRooms = function (arr, option) {
     var housingRooms = document.querySelector('#housing-rooms');
-    var rooms = window.data.getSelectValue(housingRooms);
+    var rooms = getSelectValue(housingRooms);
     var cardsFiltredArr = [];
 
     if (rooms === '1') {
@@ -70,9 +84,9 @@
     return cardsFiltredArr;
   };
 
-  var filterGuests = function (arr, option) {
+  var filterMapGuests = function (arr, option) {
     var housingGuests = document.querySelector('#housing-guests');
-    var guests = window.data.getSelectValue(housingGuests);
+    var guests = getSelectValue(housingGuests);
     var cardsFiltredArr = [];
 
     if (guests === '0') {
@@ -88,14 +102,7 @@
     return cardsFiltredArr;
   };
 
-  var filterCheckbox = function (arr, option) {
-    var arrFiltered = arr.filter(function (item) {
-      return item.offer.features.includes(option) === true;
-    });
-    return arrFiltered;
-  };
-
-  var filterFeature = function (arr, option) {
+  var filterMapFeature = function (arr, option) {
     var housingFeatures = document.querySelector('#housing-features');
     var feature = housingFeatures.querySelector('#filter-' + option);
     var cardsFiltredArr = [];
@@ -109,24 +116,29 @@
     return cardsFiltredArr;
   };
 
-  var filterFeatures = function (arr) {
+  var filterMapFeatures = function (arr) {
     var housingFeatures = document.querySelector('#housing-features');
     var featuresList = housingFeatures.querySelectorAll('input[type=checkbox]');
     var cardsFiltredArr = arr;
 
     for (var i = 0; i < featuresList.length; i++) {
-      cardsFiltredArr = filterFeature(cardsFiltredArr, featuresList[i].defaultValue);
+      cardsFiltredArr = filterMapFeature(cardsFiltredArr, featuresList[i].defaultValue);
     }
 
     return cardsFiltredArr;
   };
 
-  window.mapFilters = {
-    filterType: filterType,
-    filterPrice: filterPrice,
-    filterRooms: filterRooms,
-    filterGuests: filterGuests,
-    filterFeatures: filterFeatures
+  var applyMapFilter = function (arr) {
+    var typeArr = filterMapType(arr, 'type');
+    var priceArr = filterMapPrice(typeArr, 'price');
+    var roomsArr = filterMapRooms(priceArr, 'rooms');
+    var guestsArr = filterMapGuests(roomsArr, 'guests');
+    var wifiArr = filterMapFeatures(guestsArr, 'wifi');
+    return wifiArr;
+  };
+
+  window.mapFilter = {
+    applyMapFilter: applyMapFilter
   };
 
 })();

@@ -1,12 +1,30 @@
 'use strict';
 
 (function () {
-  var TYPESRUS = window.data.TYPESRUS;
-  var FEATURES = window.data.FEATURES;
 
-  var map = window.data.map;
+  var TYPESRUS = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
+  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+
+  var map = document.querySelector('.map');
+
   // Функции
-  var chooseSingularPlural = window.data.chooseSingularPlural;
+  var checkCardsArr = function (arr) {
+    var checkedArr = [];
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].offer) {
+        checkedArr.push(arr[i]);
+      }
+    }
+    return checkedArr;
+  };
+
+  var chooseSingularPlural = function (count, singular, plural) {
+    if (count === 1) {
+      return singular;
+    } else {
+      return plural;
+    }
+  };
 
   // Функция: удаляет несоответствующие объекту особенности из описания в карточке объекта
   var removeExtraFeatures = function (featuresBlock, allFeaturesArr, cardFeaturesArr) {
@@ -53,8 +71,13 @@
 
     // блок фото в описании
     var photos = cardElement.querySelector('.popup__photos');
-    var photo = photos.querySelector('.popup__photo');
-    createPhotoBlock(photos, photo, offer.photos);
+
+    if (offer.photos.length === 0) {
+      photos.style.display = 'none';
+    } else {
+      var photo = photos.querySelector('.popup__photo');
+      createPhotoBlock(photos, photo, offer.photos);
+    }
 
     return cardElement;
   };
@@ -69,7 +92,36 @@
     mapFiltersContainer.before(fragment);
   };
 
-  window.card = {
-    renderCardBlock: renderCardBlock
+  var removeMapPinsActiveClass = function () {
+    var mapPins = document.querySelectorAll('.map__pin');
+    mapPins.forEach(function (mapPin) {
+      if (mapPin.classList.contains('map__pin--active')) {
+        mapPin.classList.remove('map__pin--active');
+      }
+      return mapPin;
+    });
+  };
+
+  var hidePopup = function () {
+    if (document.querySelector('.popup')) {
+      document.querySelector('.popup').setAttribute('hidden', true);
+      removeMapPinsActiveClass();
+      window.removeEventListener('keydown', hidePopupEscape, {once: true});
+    }
+  };
+
+  var hidePopupEscape = function (evt) {
+    if (evt.key === 'Escape') {
+      hidePopup();
+      document.querySelector('.popup__close').removeEventListener('click', hidePopup, {once: true});
+    }
+  };
+
+  window.mapCard = {
+    checkCardsArr: checkCardsArr,
+    renderCardBlock: renderCardBlock,
+    removeMapPinsActiveClass: removeMapPinsActiveClass,
+    hidePopup: hidePopup,
+    hidePopupEscape: hidePopupEscape,
   };
 })();

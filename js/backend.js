@@ -32,7 +32,7 @@
   };
 
   // Функция: сообщение об ошибке
-  var onError = function (errorMessage) {
+  var onLoadError = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
     node.style.position = 'absolute';
@@ -44,26 +44,10 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  var showSuccessMessage = function () {
-    var main = document.querySelector('main');
-    var success = document.querySelector('#success').content;
-    var successMessage = success.cloneNode(true);
-    main.appendChild(successMessage);
-  };
-
-  var showErrorMessage = function () {
-    var main = document.querySelector('main');
-    var error = document.querySelector('#error').content;
-    var errorMessage = error.cloneNode(true);
-    main.appendChild(errorMessage);
-  };
-
-  window.connect = {
+  window.backend = {
     load: load,
     save: save,
-    onError: onError,
-    showSuccessMessage: showSuccessMessage,
-    showErrorMessage: showErrorMessage
+    onLoadError: onLoadError,
   };
 
 })();
