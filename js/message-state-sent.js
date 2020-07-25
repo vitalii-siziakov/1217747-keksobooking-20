@@ -36,7 +36,7 @@
   var onSuccessDataSent = function () {
     showSuccessMessage();
     deactivatePage();
-
+    window.formValidation.removeCheckValidEventListeners();
     window.addEventListener('click', showPageIfSuccessClick);
     window.addEventListener('keydown', showPageIfSuccessEscape, {once: true});
   };
