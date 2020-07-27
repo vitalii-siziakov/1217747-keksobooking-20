@@ -84,7 +84,7 @@
 
   window.formValidation = {
     addCheckValidEventListeners: addCheckValidEventListeners,
-    removeCheckValidEventListeners: removeCheckValidEventListeners
+    removeCheckValidEventListeners: removeCheckValidEventListeners,
   };
 
 })();
