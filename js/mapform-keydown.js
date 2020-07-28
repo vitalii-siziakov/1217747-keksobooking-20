@@ -5,9 +5,9 @@
   var housingFeatures = document.querySelector('#housing-features');
   var features = document.querySelector('.notice').querySelector('.features');
 
-  var mapFiltersId = ['filter-wifi', 'filter-dishwasher', 'filter-parking', 'filter-washer', 'filter-elevator', 'filter-conditioner'];
+  var MAPFILTERSID = ['filter-wifi', 'filter-dishwasher', 'filter-parking', 'filter-washer', 'filter-elevator', 'filter-conditioner'];
 
-  var formFeaturesId = ['feature-wifi', 'feature-dishwasher', 'feature-parking', 'feature-washer', 'feature-elevator', 'feature-conditioner'];
+  var FORMFEATURESID = ['feature-wifi', 'feature-dishwasher', 'feature-parking', 'feature-washer', 'feature-elevator', 'feature-conditioner'];
 
   var addEnterClick = function (arr, mainSelector) {
     arr.forEach(function (option) {
@@ -23,11 +23,11 @@
   };
 
   var enterMapFeatures = function () {
-    addEnterClick(mapFiltersId, housingFeatures);
+    addEnterClick(MAPFILTERSID, housingFeatures);
   };
 
   var enterFormFeatures = function () {
-    addEnterClick(formFeaturesId, features);
+    addEnterClick(FORMFEATURESID, features);
   };
 
   window.mapformKeydown = {
