@@ -4,17 +4,30 @@
 
   var MAX_SHOW_PINS_COUNT = 5;
 
+  var load = window.backend.load;
   var onLoadError = window.backend.onLoadError;
+
   var showInactiveAddress = window.mapPinMain.showInactiveAddress;
   var showActiveAddress = window.mapPinMain.showActiveAddress;
+
   var removePinsWithoutMain = window.mapPin.removePinsWithoutMain;
   var addPinCardWithEventListeners = window.mapPin.addPinCardWithEventListeners;
+  var renderPinBlocks = window.mapPin.renderPinBlocks;
   var hidePopup = window.mapCard.hidePopup;
   var removePopup = window.mapCard.removePopup;
   var checkCardsArr = window.mapCard.checkCardsArr;
-  var renderPinBlocks = window.mapPin.renderPinBlocks;
+
   var addSelectorsEventListeners = window.formFilter.addSelectorsEventListeners;
   var removeSelectorsEventListeners = window.formFilter.removeSelectorsEventListeners;
+
+  var addAvatarImage = window.formPhoto.addAvatarImage;
+  var addHousingImages = window.formPhoto.addHousingImages;
+  var removeAvatarImage = window.formPhoto.removeAvatarImage;
+  var removeHousingImages = window.formPhoto.removeHousingImages;
+
+  var removeCheckValidEventListeners = window.formValidation.removeCheckValidEventListeners;
+  var addCheckValidEventListeners = window.formValidation.addCheckValidEventListeners;
+  var resetFilters = window.mapFilter.resetFilters;
 
   var cards = [];
   var cardsFiltred = [];
@@ -79,20 +92,20 @@
     map.classList.add('map--faded');
     adForm.reset();
     adForm.classList.add('ad-form--disabled');
-    adFormSubmit.removeEventListener('click', window.formValidation.addCheckValidEventListeners);
-    window.formValidation.removeCheckValidEventListeners();
-    window.mapFilter.resetFilters();
+    adFormSubmit.removeEventListener('click', addCheckValidEventListeners);
+    removeCheckValidEventListeners();
+    resetFilters();
     addDisableAttribute(adFormFieldsets);
     addDisableAttribute(mapFiltersFieldsets);
     addDisableAttribute(mapFiltersSelectors);
     removeSelectorsEventListeners();
+    removeAvatarImage();
+    removeHousingImages();
 
     removePopup();
     removePinsWithoutMain();
     mapPinMain.setAttribute('style', 'left: 570px; top: 375px');
     showInactiveAddress();
-    window.formPhoto.removeAvatar();
-    window.formPhoto.removeHousing();
     mapPinMain.addEventListener('mousedown', onMousedownMapPinMain, {once: true});
     mapPinMain.addEventListener('keydown', onKeydownMapPinMain, {once: true});
 
@@ -104,13 +117,15 @@
     map.classList.remove('map--faded');
 
     adForm.classList.remove('ad-form--disabled');
-    adFormSubmit.addEventListener('click', window.formValidation.addCheckValidEventListeners);
+    adFormSubmit.addEventListener('click', addCheckValidEventListeners);
     removeDisableAttribute(adFormFieldsets);
     removeDisableAttribute(mapFiltersFieldsets);
     removeDisableAttribute(mapFiltersSelectors);
     addSelectorsEventListeners();
+    addAvatarImage();
+    addHousingImages();
 
-    window.backend.load(onLoadSuccess, onLoadError);
+    load(onLoadSuccess, onLoadError);
   };
 
   var onLoadSuccess = function (cardsArr) {
@@ -120,8 +135,6 @@
     addPinCardWithEventListeners(cardsFiltred);
     addMapFilterEventListeners();
     showActiveAddress();
-    window.formPhoto.addAvatar();
-    window.formPhoto.addHousing();
 
   };
 

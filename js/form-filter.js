@@ -2,6 +2,20 @@
 
 (function () {
 
+  var TYPE_PRICE = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
+
+  var ROOM_CAPACITY_INDEX = {
+    '1': [0],
+    '2': [0, 1],
+    '3': [0, 1, 2],
+    '100': [3]
+  };
+
   var typeSelect = document.querySelector('#type');
   var priceSelect = document.querySelector('#price');
   var timeinSelect = document.querySelector('#timein');
@@ -10,27 +24,13 @@
   var capacitySelect = document.querySelector('#capacity');
   var capacityOptions = capacitySelect.querySelectorAll('option');
 
-  var TYPEPRICE = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000,
-  };
-
-  var roomCapacityIndex = {
-    '1': [0],
-    '2': [0, 1],
-    '3': [0, 1, 2],
-    '100': [3]
-  };
-
   var setMinValue = function (minValue) {
     priceSelect.setAttribute('min', minValue);
     priceSelect.setAttribute('placeholder', minValue);
   };
 
   var checkTypePrice = function () {
-    setMinValue(TYPEPRICE[typeSelect.value]);
+    setMinValue(TYPE_PRICE[typeSelect.value]);
   };
 
   var checkTime = function (timeSelectA, timeSelectB) {
@@ -52,7 +52,7 @@
       capacityOption.setAttribute('disabled', 'true');
     });
 
-    roomCapacityIndex[room].forEach(function (capacityOption) {
+    ROOM_CAPACITY_INDEX[room].forEach(function (capacityOption) {
       capacityOptions[capacityOption].removeAttribute('disabled', 'true');
     });
   };

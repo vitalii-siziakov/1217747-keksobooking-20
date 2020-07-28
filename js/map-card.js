@@ -175,4 +175,5 @@
     hidePopupEscape: hidePopupEscape,
     removePopup: removePopup
   };
+
 })();

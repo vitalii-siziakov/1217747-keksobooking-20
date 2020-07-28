@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var fileChooserHousing = document.querySelector('.ad-form__upload input[type=file]');
@@ -38,19 +39,19 @@
     });
   };
 
-  var addAvatar = function () {
+  var addAvatarImage = function () {
     addPhoto(fileChooserAvatar, previewAvatar, false);
   };
 
-  var addHousing = function () {
+  var addHousingImages = function () {
     addPhoto(fileChooserHousing, previewHousing, true);
   };
 
-  var removeAvatar = function () {
+  var removeAvatarImage = function () {
     previewAvatar.src = 'img/muffin-grey.svg';
   };
 
-  var removeHousing = function () {
+  var removeHousingImages = function () {
     if (previewHousing.querySelector('img')) {
       previewHousing.querySelectorAll('img').forEach(function (photo) {
         photo.remove();
@@ -59,10 +60,10 @@
   };
 
   window.formPhoto = {
-    addAvatar: addAvatar,
-    addHousing: addHousing,
-    removeAvatar: removeAvatar,
-    removeHousing: removeHousing
+    addAvatarImage: addAvatarImage,
+    addHousingImages: addHousingImages,
+    removeAvatarImage: removeAvatarImage,
+    removeHousingImages: removeHousingImages
   };
 
 })();
