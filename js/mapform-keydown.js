@@ -2,12 +2,12 @@
 
 (function () {
 
-  var housingFeatures = document.querySelector('#housing-features');
-  var features = document.querySelector('.notice').querySelector('.features');
-
   var MAPFILTERSID = ['filter-wifi', 'filter-dishwasher', 'filter-parking', 'filter-washer', 'filter-elevator', 'filter-conditioner'];
 
   var FORMFEATURESID = ['feature-wifi', 'feature-dishwasher', 'feature-parking', 'feature-washer', 'feature-elevator', 'feature-conditioner'];
+
+  var housingFeatures = document.querySelector('#housing-features');
+  var features = document.querySelector('.notice').querySelector('.features');
 
   var addEnterClick = function (arr, mainSelector) {
     arr.forEach(function (option) {
