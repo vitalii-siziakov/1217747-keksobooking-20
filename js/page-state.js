@@ -91,6 +91,8 @@
     removePinsWithoutMain();
     mapPinMain.setAttribute('style', 'left: 570px; top: 375px');
     showInactiveAddress();
+    window.formPhoto.removeAvatar();
+    window.formPhoto.removeHousing();
     mapPinMain.addEventListener('mousedown', onMousedownMapPinMain, {once: true});
     mapPinMain.addEventListener('keydown', onKeydownMapPinMain, {once: true});
 
@@ -118,6 +120,9 @@
     addPinCardWithEventListeners(cardsFiltred);
     addMapFilterEventListeners();
     showActiveAddress();
+    window.formPhoto.addAvatar();
+    window.formPhoto.addHousing();
+
   };
 
   window.pageState = {
