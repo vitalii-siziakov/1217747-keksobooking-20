@@ -5,8 +5,6 @@
   var TYPESRUS = {palace: 'Дворец', flat: 'Квартира', house: 'Дом', bungalo: 'Бунгало'};
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-  var map = document.querySelector('.map');
-
   var checkCardsArr = function (arr) {
     var checkedArr = [];
     for (var i = 0; i < arr.length; i++) {
@@ -52,45 +50,70 @@
     var author = card.author;
     var offer = card.offer;
 
-    var CARDVALUESFORMAT = {
-      avatar: ['.popup__avatar', 'src'],
-      title: ['.popup__title', 'textContent'],
-      address: ['.popup__text--address', 'textContent'],
-      price: ['.popup__text--price', 'innerHTML'],
-      type: ['popup__type', 'textContent'],
-      capacity: ['.popup__text--capacity', 'textContent'],
-      time: ['.popup__text--time', 'textContent'],
-      description: ['.popup__description', 'textContent'],
-    };
+    var avatar = cardElement.querySelector('.popup__avatar');
+    var title = cardElement.querySelector('.popup__title');
+    var address = cardElement.querySelector('.popup__text--address');
+    var price = cardElement.querySelector('.popup__text--price');
+    var type = cardElement.querySelector('.popup__type');
+    var capacity = cardElement.querySelector('.popup__text--capacity');
+    var time = cardElement.querySelector('.popup__text--time');
+    var description = cardElement.querySelector('.popup__description');
+    var features = cardElement.querySelector('.popup__features');
+    var photos = cardElement.querySelector('.popup__photos');
 
-    var cardValues = {
-      avatar: author.avatar,
-      title: offer.title,
-      address: offer.address,
-      price: offer.price + '&#x20bd;<span>/ночь</span>',
-      type: TYPESRUS[offer.type],
-      capacity: offer.rooms + chooseSingularPlural(offer.rooms, ' комната для ', ' комнаты для ') + offer.guests + chooseSingularPlural(offer.guests, ' гостя', ' гостей'),
-      time: 'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout,
-      description: offer.description
-    };
-
-    for (var i = 0; CARDVALUESFORMAT.length; i++) {
-      if (cardValues[i].length === 0) {
-        cardElement.querySelector(CARDVALUESFORMAT[i][0]).style.display = 'none';
-      } else {
-        cardElement.querySelector(CARDVALUESFORMAT[i][0])[CARDVALUESFORMAT[i][1]] = cardValues[i];
-      }
+    if (author.avatar.length !== 0) {
+      avatar.src = author.avatar;
+    } else {
+      avatar.style.display = 'none';
     }
 
-    var features = cardElement.querySelector('.popup__features');
+    if (offer.title.length !== 0) {
+      title.textContent = offer.title;
+    } else {
+      title.style.display = 'none';
+    }
+
+    if (offer.address.length !== 0) {
+      address.textContent = offer.address;
+    } else {
+      address.style.display = 'none';
+    }
+
+    if (offer.price.length !== 0) {
+      price.innerHTML = offer.price + '&#x20bd;<span>/ночь</span>';
+    } else {
+      price.style.display = 'none';
+    }
+
+    if (offer.type.length !== 0) {
+      type.textContent = TYPESRUS[offer.type];
+    } else {
+      type.style.display = 'none';
+    }
+
+    if (offer.rooms.length !== 0 && offer.guests.length === 0) {
+      capacity.textContent = offer.rooms + chooseSingularPlural(offer.rooms, ' комната для ', ' комнаты для ') + offer.guests + chooseSingularPlural(offer.guests, ' гостя', ' гостей');
+    } else {
+      capacity.style.display = 'none';
+    }
+
+    if (offer.checkin.length !== 0 && offer.checkout.length !== 0) {
+      time.textContent = 'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
+    } else {
+      time.style.display = 'none';
+    }
+
+    if (offer.description.length !== 0) {
+      description.textContent = offer.description;
+    } else {
+      description.style.display = 'none';
+    }
 
     if (offer.features.length === 0) {
       features.style.display = 'none';
     } else {
       removeExtraFeatures(features, FEATURES, offer.features);
     }
-
-    var photos = cardElement.querySelector('.popup__photos');
 
     if (offer.photos.length === 0) {
       photos.style.display = 'none';
@@ -103,7 +126,7 @@
   };
 
   var renderCardBlock = function (cardsArrItem) {
-
+    var map = document.querySelector('.map');
     var cardBlock = createCardBlock(cardsArrItem);
     var fragment = document.createDocumentFragment().appendChild(cardBlock);
 
