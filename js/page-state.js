@@ -2,25 +2,22 @@
 
 (function () {
 
-  // Импорт функций из других модулей
-  var onLoadError = window.backend.onLoadError;
-  var showMapPinMainInactiveAddress = window.mapPinMain.showMapPinMainInactiveAddress;
-  var showMapPinMainActiveAddress = window.mapPinMain.showMapPinMainActiveAddress;
+  var MAX_SHOW_PINS_COUNT = 5;
 
-  var removeMapPinsWithoutMapPinMain = window.mapPin.removeMapPinsWithoutMapPinMain;
-  var addMapPinCardWithEventListeners = window.mapPin.addMapPinCardWithEventListeners;
+  var onLoadError = window.backend.onLoadError;
+  var showInactiveAddress = window.mapPinMain.showInactiveAddress;
+  var showActiveAddress = window.mapPinMain.showActiveAddress;
+  var removePinsWithoutMain = window.mapPin.removePinsWithoutMain;
+  var addPinCardWithEventListeners = window.mapPin.addPinCardWithEventListeners;
   var hidePopup = window.mapCard.hidePopup;
   var removePopup = window.mapCard.removePopup;
   var checkCardsArr = window.mapCard.checkCardsArr;
-  var applyMapFilter = window.mapFilter.applyMapFilter;
   var renderPinBlocks = window.mapPin.renderPinBlocks;
-  var addFormFilterEventListeners = window.formFilter.addFormFilterEventListeners;
-  var removeFormFilterEventListeners = window.formFilter.removeFormFilterEventListeners;
+  var addSelectorsEventListeners = window.formFilter.addSelectorsEventListeners;
+  var removeSelectorsEventListeners = window.formFilter.removeSelectorsEventListeners;
 
-  // Объявление переменных модуля
   var cards = [];
   var cardsFiltred = [];
-  var maxShowPinsCount = 5;
   var map = document.querySelector('.map');
 
   var adForm = document.querySelector('.ad-form');
@@ -34,17 +31,15 @@
 
 
   var addDisableAttribute = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      var element = array[i];
+    array.forEach(function (element) {
       element.setAttribute('disabled', 'true');
-    }
+    });
   };
 
   var removeDisableAttribute = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      var element = array[i];
+    array.forEach(function (element) {
       element.removeAttribute('disabled');
-    }
+    });
   };
 
   // Функция: нажатие ЛКМ на главный pin
@@ -65,13 +60,13 @@
 
   // change map filter
   var changeMapFilter = window.debounce(function () {
-    removeMapPinsWithoutMapPinMain();
+    removePinsWithoutMain();
     hidePopup();
 
-    cardsFiltred = applyMapFilter(cards);
-    var cardsFiltredSlice = cardsFiltred.slice(0, maxShowPinsCount);
+    cardsFiltred = window.mapFilter.applyFilters(cards);
+    var cardsFiltredSlice = cardsFiltred.slice(0, MAX_SHOW_PINS_COUNT);
     renderPinBlocks(cardsFiltredSlice);
-    addMapPinCardWithEventListeners(cardsFiltredSlice);
+    addPinCardWithEventListeners(cardsFiltredSlice);
   });
 
   var addMapFilterEventListeners = function () {
@@ -86,16 +81,16 @@
     adForm.classList.add('ad-form--disabled');
     adFormSubmit.removeEventListener('click', window.formValidation.addCheckValidEventListeners);
     window.formValidation.removeCheckValidEventListeners();
-    window.mapFilter.resetMapFilter();
+    window.mapFilter.resetFilters();
     addDisableAttribute(adFormFieldsets);
     addDisableAttribute(mapFiltersFieldsets);
     addDisableAttribute(mapFiltersSelectors);
-    removeFormFilterEventListeners();
+    removeSelectorsEventListeners();
 
     removePopup();
-    removeMapPinsWithoutMapPinMain();
+    removePinsWithoutMain();
     mapPinMain.setAttribute('style', 'left: 570px; top: 375px');
-    showMapPinMainInactiveAddress();
+    showInactiveAddress();
     mapPinMain.addEventListener('mousedown', onMousedownMapPinMain, {once: true});
     mapPinMain.addEventListener('keydown', onKeydownMapPinMain, {once: true});
 
@@ -111,19 +106,18 @@
     removeDisableAttribute(adFormFieldsets);
     removeDisableAttribute(mapFiltersFieldsets);
     removeDisableAttribute(mapFiltersSelectors);
-    addFormFilterEventListeners();
+    addSelectorsEventListeners();
 
     window.backend.load(onLoadSuccess, onLoadError);
   };
 
-  // activate page
   var onLoadSuccess = function (cardsArr) {
     cards = checkCardsArr(cardsArr);
-    cardsFiltred = cards.slice(0, maxShowPinsCount);
+    cardsFiltred = cards.slice(0, MAX_SHOW_PINS_COUNT);
     renderPinBlocks(cardsFiltred);
-    addMapPinCardWithEventListeners(cardsFiltred);
+    addPinCardWithEventListeners(cardsFiltred);
     addMapFilterEventListeners();
-    showMapPinMainActiveAddress();
+    showActiveAddress();
   };
 
   window.pageState = {

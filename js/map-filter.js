@@ -2,22 +2,33 @@
 
 (function () {
 
-  var ROOMSVALUES = {
-    '1': 1,
-    '2': 2,
-    '3': 3
+  var ANY_SELECT_VALUE = 'any';
+  var PRICE_SELECT_VALUES = {
+    low: ['low', 10000],
+    middle: ['middle', 10000, 50000],
+    high: ['high', 50000]
   };
 
-  var GUESTSVALUES = {
-    '0': 0,
-    '1': 1,
-    '2': 2
-  };
+  var housingType = document.querySelector('#housing-type');
+  var housingPrice = document.querySelector('#housing-price');
+  var housingRooms = document.querySelector('#housing-rooms');
+  var housingGuests = document.querySelector('#housing-guests');
+  var housingFeatures = document.querySelector('#housing-features');
 
-  var filter = function (arr, option, value) {
-    var arrFiltered = arr.filter(function (item) {
-      return item.offer[option] === value;
-    });
+  var filterArr = function (arr, option, value, parseToInt) {
+    var valueOption = value;
+
+    if (parseToInt) {
+      valueOption = parseInt(value, 10);
+    }
+
+    if (value !== ANY_SELECT_VALUE) {
+      var arrFiltered = arr.filter(function (item) {
+        return item.offer[option] === valueOption;
+      });
+    } else {
+      arrFiltered = arr;
+    }
     return arrFiltered;
   };
 
@@ -28,35 +39,28 @@
     return arrFiltered;
   };
 
-  var filterMapType = function (arr, option) {
-    var housingType = document.querySelector('#housing-type');
-    var type = housingType.value;
-    var cardsFiltredArr = [];
 
-    if (type !== 'any') {
-      cardsFiltredArr = filter(arr, option, type);
-    } else {
-      cardsFiltredArr = arr;
-    }
+  var filterMapType = function (arr, option) {
+    var type = housingType.value;
+    var cardsFiltredArr = filterArr(arr, option, type, false);
     return cardsFiltredArr;
   };
 
   var filterMapPrice = function (arr) {
-    var housingPrice = document.querySelector('#housing-price');
     var price = housingPrice.value;
     var cardsFiltredArr = [];
 
-    if (price === 'low') {
+    if (price === PRICE_SELECT_VALUES.low[0]) {
       cardsFiltredArr = arr.filter(function (item) {
-        return item.offer.price < 10000;
+        return item.offer.price < PRICE_SELECT_VALUES.low[1];
       });
-    } else if (price === 'high') {
+    } else if (price === PRICE_SELECT_VALUES.high[0]) {
       cardsFiltredArr = arr.filter(function (item) {
-        return item.offer.price > 50000;
+        return item.offer.price > PRICE_SELECT_VALUES.high[1];
       });
-    } else if (price === 'middle') {
+    } else if (price === PRICE_SELECT_VALUES.middle[0]) {
       cardsFiltredArr = arr.filter(function (item) {
-        return item.offer.price >= 10000 && item.offer.price <= 50000;
+        return item.offer.price >= PRICE_SELECT_VALUES.middle[1] && item.offer.price <= PRICE_SELECT_VALUES.middle[2];
       });
     } else {
       cardsFiltredArr = arr;
@@ -65,73 +69,49 @@
     return cardsFiltredArr;
   };
 
-  var filterMapRooms = function (arr, option, values) {
-    var housingRooms = document.querySelector('#housing-rooms');
+  var filterMapRooms = function (arr, option) {
     var rooms = housingRooms.value;
-    var cardsFiltredArr = [];
-
-    if (rooms !== 'any') {
-      cardsFiltredArr = filter(arr, option, values[rooms]);
-    } else {
-      cardsFiltredArr = arr;
-    }
+    var cardsFiltredArr = filterArr(arr, option, rooms, true);
     return cardsFiltredArr;
   };
 
-  var filterMapGuests = function (arr, option, values) {
-    var housingGuests = document.querySelector('#housing-guests');
+  var filterMapGuests = function (arr, option) {
     var guests = housingGuests.value;
-    var cardsFiltredArr = [];
-
-    if (guests !== 'any') {
-      cardsFiltredArr = filter(arr, option, values[guests]);
-    } else {
-      cardsFiltredArr = arr;
-    }
+    var cardsFiltredArr = filterArr(arr, option, guests, true);
     return cardsFiltredArr;
   };
 
   var filterMapFeature = function (arr, option) {
-    var housingFeatures = document.querySelector('#housing-features');
-    var feature = housingFeatures.querySelector('#filter-' + option);
-    var cardsFiltredArr = [];
-
-    if (feature.checked === true) {
-      cardsFiltredArr = filterCheckbox(arr, option);
-    } else {
-      cardsFiltredArr = arr;
-    }
-
+    var cardsFiltredArr = filterCheckbox(arr, option);
     return cardsFiltredArr;
   };
 
   var filterMapFeatures = function (arr) {
-    var housingFeatures = document.querySelector('#housing-features');
-    var featuresList = housingFeatures.querySelectorAll('input[type=checkbox]');
+    var featuresList = housingFeatures.querySelectorAll('input[type=\'checkbox\']:checked');
     var cardsFiltredArr = arr;
 
-    for (var i = 0; i < featuresList.length; i++) {
-      cardsFiltredArr = filterMapFeature(cardsFiltredArr, featuresList[i].defaultValue);
-    }
+    featuresList.forEach(function (feature) {
+      cardsFiltredArr = filterMapFeature(cardsFiltredArr, feature.defaultValue);
+    });
 
     return cardsFiltredArr;
   };
 
-  var applyMapFilter = function (arr) {
+  var applyFilters = function (arr) {
     var typeArr = filterMapType(arr, 'type');
     var priceArr = filterMapPrice(typeArr, 'price');
-    var roomsArr = filterMapRooms(priceArr, 'rooms', ROOMSVALUES);
-    var guestsArr = filterMapGuests(roomsArr, 'guests', GUESTSVALUES);
+    var roomsArr = filterMapRooms(priceArr, 'rooms');
+    var guestsArr = filterMapGuests(roomsArr, 'guests');
     var featuresArr = filterMapFeatures(guestsArr, 'wifi');
     return featuresArr;
   };
 
-  var resetMapFilter = function () {
+  var resetFilters = function () {
     var housingFilters = document.querySelector('.map__filters').querySelectorAll('select');
-    var housingFeaturesInput = document.querySelector('#housing-features').querySelectorAll('input');
+    var housingFeaturesInput = housingFeatures.querySelectorAll('input');
 
     housingFilters.forEach(function (housingFilter) {
-      housingFilter.value = 'any';
+      housingFilter.value = ANY_SELECT_VALUE;
     });
     housingFeaturesInput.forEach(function (housingFeatureInput) {
       housingFeatureInput.checked = false;
@@ -139,8 +119,8 @@
   };
 
   window.mapFilter = {
-    applyMapFilter: applyMapFilter,
-    resetMapFilter: resetMapFilter
+    applyFilters: applyFilters,
+    resetFilters: resetFilters
   };
 
 })();

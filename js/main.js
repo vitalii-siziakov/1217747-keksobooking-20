@@ -3,7 +3,7 @@
 (function () {
 
   window.pageState.deactivatePage();
-  window.mapPinMain.moveMapPinMain();
+  window.mapPinMain.move();
   window.messageStateSent.addformSubmitResetEventListeners();
   window.mapformKeydown.enterMapFeatures();
   window.mapformKeydown.enterFormFeatures();

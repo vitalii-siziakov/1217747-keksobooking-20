@@ -48,23 +48,23 @@
   var checkRoom = function () {
     var room = roomNumberSelect.value;
 
-    for (var a = 0; a < capacityOptions.length; a++) {
-      capacityOptions[a].setAttribute('disabled', 'true');
-    }
+    capacityOptions.forEach(function (capacityOption) {
+      capacityOption.setAttribute('disabled', 'true');
+    });
 
-    for (var b = 0; b < roomCapacityIndex[room].length; b++) {
-      capacityOptions[roomCapacityIndex[room][b]].removeAttribute('disabled', 'true');
-    }
+    roomCapacityIndex[room].forEach(function (capacityOption) {
+      capacityOptions[capacityOption].removeAttribute('disabled', 'true');
+    });
   };
 
-  var addFormFilterEventListeners = function () {
+  var addSelectorsEventListeners = function () {
     typeSelect.addEventListener('change', checkTypePrice);
     timeinSelect.addEventListener('change', checkTimeIn);
     timeoutSelect.addEventListener('change', checkTimeOut);
     roomNumberSelect.addEventListener('change', checkRoom);
   };
 
-  var removeFormFilterEventListeners = function () {
+  var removeSelectorsEventListeners = function () {
     typeSelect.removeEventListener('change', checkTypePrice);
     timeinSelect.removeEventListener('change', checkTimeIn);
     timeoutSelect.removeEventListener('change', checkTimeOut);
@@ -72,8 +72,8 @@
   };
 
   window.formFilter = {
-    addFormFilterEventListeners: addFormFilterEventListeners,
-    removeFormFilterEventListeners: removeFormFilterEventListeners
+    addSelectorsEventListeners: addSelectorsEventListeners,
+    removeSelectorsEventListeners: removeSelectorsEventListeners
   };
 
 })();

@@ -2,7 +2,7 @@
 
 (function () {
 
-  var ROOMCAPACITYVALID = {
+  var ROOM_CAPACITY_VALID = {
     '1': ['1'],
     '2': ['1', '2'],
     '3': ['1', '2', '3'],
@@ -53,7 +53,7 @@
     var room = roomNumberSelect.value;
     var capacity = capacitySelect.value;
 
-    if (ROOMCAPACITYVALID[room].includes(capacity)) {
+    if (ROOM_CAPACITY_VALID[room].includes(capacity)) {
       removeElementRedBorder(capacitySelect);
     } else {
       addElementRedBorder(capacitySelect);

@@ -2,9 +2,9 @@
 
 (function () {
 
-  var MAPFILTERSID = ['filter-wifi', 'filter-dishwasher', 'filter-parking', 'filter-washer', 'filter-elevator', 'filter-conditioner'];
+  var MAP_FILTERS_ID = ['filter-wifi', 'filter-dishwasher', 'filter-parking', 'filter-washer', 'filter-elevator', 'filter-conditioner'];
 
-  var FORMFEATURESID = ['feature-wifi', 'feature-dishwasher', 'feature-parking', 'feature-washer', 'feature-elevator', 'feature-conditioner'];
+  var FORM_FEATURES_ID = ['feature-wifi', 'feature-dishwasher', 'feature-parking', 'feature-washer', 'feature-elevator', 'feature-conditioner'];
 
   var housingFeatures = document.querySelector('#housing-features');
   var features = document.querySelector('.notice').querySelector('.features');
@@ -23,11 +23,11 @@
   };
 
   var enterMapFeatures = function () {
-    addEnterClick(MAPFILTERSID, housingFeatures);
+    addEnterClick(MAP_FILTERS_ID, housingFeatures);
   };
 
   var enterFormFeatures = function () {
-    addEnterClick(FORMFEATURESID, features);
+    addEnterClick(FORM_FEATURES_ID, features);
   };
 
   window.mapformKeydown = {
