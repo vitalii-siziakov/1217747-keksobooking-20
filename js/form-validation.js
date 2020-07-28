@@ -2,19 +2,24 @@
 
 (function () {
 
-  var getSelectValue = function (select) {
-    var currentSelect = select;
-    var value = currentSelect.value;
-    return value;
+  var ROOMCAPACITYVALID = {
+    '1': ['1'],
+    '2': ['1', '2'],
+    '3': ['1', '2', '3'],
+    '100': ['0']
   };
 
+  var adFormSubmit = document.querySelector('.ad-form__submit');
+  var roomNumberSelect = document.querySelector('#room_number');
+  var capacitySelect = document.querySelector('#capacity');
+  var priceInputSelect = document.querySelector('#price');
+  var titleInputSelect = document.querySelector('#title');
+
   var disableAdFormSubmit = function () {
-    var adFormSubmit = document.querySelector('.ad-form__submit');
     adFormSubmit.disabled = true;
   };
 
   var enableAdFormSubmit = function () {
-    var adFormSubmit = document.querySelector('.ad-form__submit');
     adFormSubmit.disabled = false;
   };
 
@@ -29,7 +34,6 @@
   };
 
   var checkPriceValid = function () {
-    var priceInputSelect = document.querySelector('#price');
     if (priceInputSelect.validity.valueMissing || priceInputSelect.validity.rangeUnderflow || priceInputSelect.validity.rangeOverflow) {
       addElementRedBorder(priceInputSelect);
     } else {
@@ -38,7 +42,6 @@
   };
 
   var checkTitleValid = function () {
-    var titleInputSelect = document.querySelector('#title');
     if (titleInputSelect.validity.valueMissing || titleInputSelect.validity.tooShort || titleInputSelect.validity.tooLong) {
       addElementRedBorder(titleInputSelect);
     } else {
@@ -47,18 +50,10 @@
   };
 
   var checkCapacityValid = function () {
-    var roomNumberSelect = document.querySelector('#room_number');
-    var capacitySelect = document.querySelector('#capacity');
-    var room = getSelectValue(roomNumberSelect);
-    var capacity = getSelectValue(capacitySelect);
+    var room = roomNumberSelect.value;
+    var capacity = capacitySelect.value;
 
-    if (room === '1' && capacity === '1' ||
-    room === '2' && capacity === '1' ||
-    room === '2' && capacity === '2' ||
-    room === '3' && capacity === '1' ||
-    room === '3' && capacity === '2' ||
-    room === '3' && capacity === '3' ||
-    room === '100' && capacity === '0') {
+    if (ROOMCAPACITYVALID[room].includes(capacity)) {
       removeElementRedBorder(capacitySelect);
     } else {
       addElementRedBorder(capacitySelect);
@@ -69,22 +64,26 @@
     checkTitleValid();
     checkPriceValid();
     checkCapacityValid();
-    document.querySelector('#price').addEventListener('change', checkPriceValid);
-    document.querySelector('#title').addEventListener('change', checkTitleValid);
-    document.querySelector('#room_number').addEventListener('change', checkCapacityValid);
-    document.querySelector('#capacity').addEventListener('change', checkCapacityValid);
+    priceInputSelect.addEventListener('change', checkPriceValid);
+    titleInputSelect.addEventListener('change', checkTitleValid);
+    roomNumberSelect.addEventListener('change', checkCapacityValid);
+    capacitySelect.addEventListener('change', checkCapacityValid);
   };
 
   var removeCheckValidEventListeners = function () {
-    document.querySelector('#price').removeEventListener('change', checkPriceValid);
-    document.querySelector('#title').removeEventListener('change', checkTitleValid);
-    document.querySelector('#room_number').removeEventListener('change', checkCapacityValid);
-    document.querySelector('#capacity').removeEventListener('change', checkCapacityValid);
+    priceInputSelect.removeEventListener('change', checkPriceValid);
+    titleInputSelect.removeEventListener('change', checkTitleValid);
+    roomNumberSelect.removeEventListener('change', checkCapacityValid);
+    capacitySelect.removeEventListener('change', checkCapacityValid);
+    removeElementRedBorder(priceInputSelect);
+    removeElementRedBorder(document.querySelector('#title'));
+    removeElementRedBorder(roomNumberSelect);
+    removeElementRedBorder(capacitySelect);
   };
 
   window.formValidation = {
     addCheckValidEventListeners: addCheckValidEventListeners,
-    removeCheckValidEventListeners: removeCheckValidEventListeners,
+    removeCheckValidEventListeners: removeCheckValidEventListeners
   };
 
 })();

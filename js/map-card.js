@@ -7,7 +7,6 @@
 
   var map = document.querySelector('.map');
 
-  // Функции
   var checkCardsArr = function (arr) {
     var checkedArr = [];
     for (var i = 0; i < arr.length; i++) {
@@ -26,7 +25,6 @@
     }
   };
 
-  // Функция: удаляет несоответствующие объекту особенности из описания в карточке объекта
   var removeExtraFeatures = function (featuresBlock, allFeaturesArr, cardFeaturesArr) {
     for (var i = 0; i < allFeaturesArr.length; i++) {
       if (!cardFeaturesArr.includes(allFeaturesArr[i])) {
@@ -35,7 +33,6 @@
     }
   };
 
-  // Функция: создает блок фото для описания в карточке объекта
   var createPhotoBlock = function (photosBlock, photoBlock, cardPhotosArr) {
     for (var i = 0; i < cardPhotosArr.length; i++) {
       if (i === 0) {
@@ -48,7 +45,6 @@
     }
   };
 
-  // Функция: создает описание для карточки объекта
   var createCardBlock = function (card) {
 
     var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -56,7 +52,7 @@
     var author = card.author;
     var offer = card.offer;
 
-    var cardValueFormat = {
+    var CARDVALUESFORMAT = {
       avatar: ['.popup__avatar', 'src'],
       title: ['.popup__title', 'textContent'],
       address: ['.popup__text--address', 'textContent'],
@@ -78,15 +74,14 @@
       description: offer.description
     };
 
-    for (var i = 0; cardValueFormat.length; i++) {
+    for (var i = 0; CARDVALUESFORMAT.length; i++) {
       if (cardValues[i].length === 0) {
-        cardElement.querySelector(cardValueFormat[i][0]).style.display = 'none';
+        cardElement.querySelector(CARDVALUESFORMAT[i][0]).style.display = 'none';
       } else {
-        cardElement.querySelector(cardValueFormat[i][0])[cardValueFormat[i][1]] = cardValues[i];
+        cardElement.querySelector(CARDVALUESFORMAT[i][0])[CARDVALUESFORMAT[i][1]] = cardValues[i];
       }
     }
 
-    // блок особенностей в описании
     var features = cardElement.querySelector('.popup__features');
 
     if (offer.features.length === 0) {
@@ -95,7 +90,6 @@
       removeExtraFeatures(features, FEATURES, offer.features);
     }
 
-    // блок фото в описании
     var photos = cardElement.querySelector('.popup__photos');
 
     if (offer.photos.length === 0) {
@@ -108,7 +102,6 @@
     return cardElement;
   };
 
-  // Функция: рендерит блок описания объекта на странице
   var renderCardBlock = function (cardsArrItem) {
 
     var cardBlock = createCardBlock(cardsArrItem);

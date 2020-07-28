@@ -2,7 +2,6 @@
 
 (function () {
 
-  // Импорт функций из других модулей
   var deactivatePage = window.pageState.deactivatePage;
   var save = window.backend.save;
 

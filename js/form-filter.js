@@ -8,11 +8,20 @@
   var timeoutSelect = document.querySelector('#timeout');
   var roomNumberSelect = document.querySelector('#room_number');
   var capacitySelect = document.querySelector('#capacity');
+  var capacityOptions = capacitySelect.querySelectorAll('option');
 
-  var getSelectValue = function (select) {
-    var currentSelect = select;
-    var value = currentSelect.value;
-    return value;
+  var TYPEPRICE = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000,
+  };
+
+  var roomCapacityIndex = {
+    '1': [0],
+    '2': [0, 1],
+    '3': [0, 1, 2],
+    '100': [3]
   };
 
   var setMinValue = function (minValue) {
@@ -21,29 +30,11 @@
   };
 
   var checkTypePrice = function () {
-    var type = getSelectValue(typeSelect);
-
-    if (type === 'flat') {
-      setMinValue('1000');
-    } else if (type === 'house') {
-      setMinValue('5000');
-    } else if (type === 'palace') {
-      setMinValue('10000');
-    } else {
-      setMinValue('0');
-    }
+    setMinValue(TYPEPRICE[typeSelect.value]);
   };
 
   var checkTime = function (timeSelectA, timeSelectB) {
-    var time = getSelectValue(timeSelectA);
-
-    if (time === '12:00') {
-      timeSelectB.value = '12:00';
-    } else if (time === '13:00') {
-      timeSelectB.value = '13:00';
-    } else {
-      timeSelectB.value = '14:00';
-    }
+    timeSelectB.value = timeSelectA.value;
   };
 
   var checkTimeIn = function () {
@@ -55,28 +46,14 @@
   };
 
   var checkRoom = function () {
-    var room = getSelectValue(roomNumberSelect);
+    var room = roomNumberSelect.value;
 
-    if (room === '1') {
-      capacitySelect[0].removeAttribute('disabled', 'true');
-      capacitySelect[1].setAttribute('disabled', 'true');
-      capacitySelect[2].setAttribute('disabled', 'true');
-      capacitySelect[3].setAttribute('disabled', 'true');
-    } else if (room === '2') {
-      capacitySelect[0].removeAttribute('disabled', 'true');
-      capacitySelect[1].removeAttribute('disabled', 'true');
-      capacitySelect[2].setAttribute('disabled', 'true');
-      capacitySelect[3].setAttribute('disabled', 'true');
-    } else if (room === '3') {
-      capacitySelect[0].removeAttribute('disabled', 'true');
-      capacitySelect[1].removeAttribute('disabled', 'true');
-      capacitySelect[2].removeAttribute('disabled', 'true');
-      capacitySelect[3].setAttribute('disabled', 'true');
-    } else {
-      capacitySelect[0].setAttribute('disabled', 'true');
-      capacitySelect[1].setAttribute('disabled', 'true');
-      capacitySelect[2].setAttribute('disabled', 'true');
-      capacitySelect[3].removeAttribute('disabled', 'true');
+    for (var a = 0; a < capacityOptions.length; a++) {
+      capacityOptions[a].setAttribute('disabled', 'true');
+    }
+
+    for (var b = 0; b < roomCapacityIndex[room].length; b++) {
+      capacityOptions[roomCapacityIndex[room][b]].removeAttribute('disabled', 'true');
     }
   };
 

@@ -2,27 +2,22 @@
 
 (function () {
 
-  var showMapPinMainInactiveAddress = function () {
-    var mapPinMain = document.querySelector('.map__pin--main');
-    var mainPinMoveInactive = Math.round(65 / 2);
+  var map = document.querySelector('.map');
+  var mapPinMain = map.querySelector('.map__pin--main');
+  var mainPinMoveInactive = Math.round(65 / 2);
+  var mainPinMoveX = Math.round(65 / 2);
+  var mainPinMoveY = Math.round(62 + 22 - 2);
+  var addressInput = document.querySelector('#address');
 
-    var addressInput = document.querySelector('#address');
+  var showMapPinMainInactiveAddress = function () {
     addressInput.setAttribute('value', (mapPinMain.offsetLeft + mainPinMoveInactive) + ' ' + (mapPinMain.offsetTop - mainPinMoveInactive));
   };
 
   var showMapPinMainActiveAddress = function () {
-    var mapPinMain = document.querySelector('.map__pin--main');
-    var mainPinMoveX = Math.round(65 / 2);
-    var mainPinMoveY = Math.round(62 + 22 - 2);
-
-    var addressInput = document.querySelector('#address');
     addressInput.setAttribute('value', (mapPinMain.offsetLeft + mainPinMoveX) + ' ' + (mapPinMain.offsetTop + mainPinMoveY));
   };
 
   var moveMapPinMain = function () {
-    var map = document.querySelector('.map');
-    var mapPinMain = map.querySelector('.map__pin--main');
-
     mapPinMain.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
 

@@ -2,10 +2,16 @@
 
 (function () {
 
-  var getSelectValue = function (select) {
-    var currentSelect = select;
-    var value = currentSelect.value;
-    return value;
+  var ROOMSVALUES = {
+    '1': 1,
+    '2': 2,
+    '3': 3
+  };
+
+  var GUESTSVALUES = {
+    '0': 0,
+    '1': 1,
+    '2': 2
   };
 
   var filter = function (arr, option, value) {
@@ -24,27 +30,20 @@
 
   var filterMapType = function (arr, option) {
     var housingType = document.querySelector('#housing-type');
-    var type = getSelectValue(housingType);
+    var type = housingType.value;
     var cardsFiltredArr = [];
 
-    if (type === 'palace') {
-      cardsFiltredArr = filter(arr, option, 'palace');
-    } else if (type === 'flat') {
-      cardsFiltredArr = filter(arr, option, 'flat');
-    } else if (type === 'house') {
-      cardsFiltredArr = filter(arr, option, 'house');
-    } else if (type === 'bungalo') {
-      cardsFiltredArr = filter(arr, option, 'bungalo');
+    if (type !== 'any') {
+      cardsFiltredArr = filter(arr, option, type);
     } else {
       cardsFiltredArr = arr;
     }
-
     return cardsFiltredArr;
   };
 
   var filterMapPrice = function (arr) {
     var housingPrice = document.querySelector('#housing-price');
-    var price = getSelectValue(housingPrice);
+    var price = housingPrice.value;
     var cardsFiltredArr = [];
 
     if (price === 'low') {
@@ -66,39 +65,29 @@
     return cardsFiltredArr;
   };
 
-  var filterMapRooms = function (arr, option) {
+  var filterMapRooms = function (arr, option, values) {
     var housingRooms = document.querySelector('#housing-rooms');
-    var rooms = getSelectValue(housingRooms);
+    var rooms = housingRooms.value;
     var cardsFiltredArr = [];
 
-    if (rooms === '1') {
-      cardsFiltredArr = filter(arr, option, 1);
-    } else if (rooms === '2') {
-      cardsFiltredArr = filter(arr, option, 2);
-    } else if (rooms === '3') {
-      cardsFiltredArr = filter(arr, option, 3);
+    if (rooms !== 'any') {
+      cardsFiltredArr = filter(arr, option, values[rooms]);
     } else {
       cardsFiltredArr = arr;
     }
-
     return cardsFiltredArr;
   };
 
-  var filterMapGuests = function (arr, option) {
+  var filterMapGuests = function (arr, option, values) {
     var housingGuests = document.querySelector('#housing-guests');
-    var guests = getSelectValue(housingGuests);
+    var guests = housingGuests.value;
     var cardsFiltredArr = [];
 
-    if (guests === '0') {
-      cardsFiltredArr = filter(arr, option, 0);
-    } else if (guests === '1') {
-      cardsFiltredArr = filter(arr, option, 1);
-    } else if (guests === '2') {
-      cardsFiltredArr = filter(arr, option, 2);
+    if (guests !== 'any') {
+      cardsFiltredArr = filter(arr, option, values[guests]);
     } else {
       cardsFiltredArr = arr;
     }
-
     return cardsFiltredArr;
   };
 
@@ -131,14 +120,27 @@
   var applyMapFilter = function (arr) {
     var typeArr = filterMapType(arr, 'type');
     var priceArr = filterMapPrice(typeArr, 'price');
-    var roomsArr = filterMapRooms(priceArr, 'rooms');
-    var guestsArr = filterMapGuests(roomsArr, 'guests');
-    var wifiArr = filterMapFeatures(guestsArr, 'wifi');
-    return wifiArr;
+    var roomsArr = filterMapRooms(priceArr, 'rooms', ROOMSVALUES);
+    var guestsArr = filterMapGuests(roomsArr, 'guests', GUESTSVALUES);
+    var featuresArr = filterMapFeatures(guestsArr, 'wifi');
+    return featuresArr;
+  };
+
+  var resetMapFilter = function () {
+    var housingFilters = document.querySelector('.map__filters').querySelectorAll('select');
+    var housingFeaturesInput = document.querySelector('#housing-features').querySelectorAll('input');
+
+    housingFilters.forEach(function (housingFilter) {
+      housingFilter.value = 'any';
+    });
+    housingFeaturesInput.forEach(function (housingFeatureInput) {
+      housingFeatureInput.checked = false;
+    });
   };
 
   window.mapFilter = {
-    applyMapFilter: applyMapFilter
+    applyMapFilter: applyMapFilter,
+    resetMapFilter: resetMapFilter
   };
 
 })();

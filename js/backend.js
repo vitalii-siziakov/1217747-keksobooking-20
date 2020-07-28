@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var load = function (onLoad, onError) {
     var URL = 'https://javascript.pages.academy/keksobooking/data';
     var xhr = new XMLHttpRequest();
@@ -31,7 +32,6 @@
     xhr.send(data);
   };
 
-  // Функция: сообщение об ошибке
   var onLoadError = function (errorMessage) {
     var node = document.createElement('div');
     node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
